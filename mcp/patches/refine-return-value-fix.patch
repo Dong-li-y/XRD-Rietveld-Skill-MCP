@@ -1,0 +1,113 @@
+--- server.py.orig-2026-08-14.bak	2026-10-12 22:47:30.844141300 +0800
++++ server.py	2026-10-12 22:45:43.503662200 +0800
+@@ -15,8 +15,11 @@
+ 
+ from __future__ import annotations
+ 
++import contextlib
++import io
+ import json
+ import os
++import re
+ import sys
+ import traceback
+ from pathlib import Path
+@@ -353,25 +356,68 @@
+     return f"Freed variable '{var_name}'"
+ 
+ 
+-def refine() -> dict:
++_MAX_SHIFT_RE = re.compile(r"Maximum shift/esd = ([0-9.eE+-]+)")
++_REFINE_FAIL_MARKERS = (
++    "Refinement failed",
++    "Refine aborted",
++    "Least squares aborted",
++)
++
++
++def refine(max_cycles: int = 0) -> dict:
+     """Run a Rietveld refinement on the current project.
+ 
+-    GSAS-II iterates internally until convergence. Returns the residual
+-    summary after refinement; call get_results for full details.
++    GSAS-II iterates internally until convergence or until
++    Controls['max cyc'] is reached. Pass max_cycles > 0 to raise that limit for
++    this call (GSAS-II's default of 3 frequently stops before convergence).
++
++    Outcome detection: GSASIIscriptable.Project.refine() has no return value in
++    this GSAS-II version, so success/failure is read from the refinement log
++    itself, and the final "Maximum shift/esd" is reported back to the caller.
+     """
+     _ensure_project()
++    if max_cycles and int(max_cycles) > 0:
++        try:
++            _current_project.data["Controls"]["data"]["max cyc"] = int(max_cycles)
++        except Exception:  # pragma: no cover - defensive, Controls always present
++            pass
++    buf = io.StringIO()
+     try:
+-        result = _current_project.refine()
++        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
++            _current_project.refine()
+     except Exception as e:
+-        raise RuntimeError(f"Refinement failed: {e}") from None
+-    if result is None:
+-        # GSAS-II returns None when the refinement fails to converge/run
++        log = buf.getvalue().splitlines()[-15:]
+         raise RuntimeError(
+-            "Refinement failed (GSAS-II returned no result). "
+-            "Check the .lst output for details (e.g. singular matrix, "
+-            "divide-by-zero, or unstable parameters)."
+-        )
+-    return {"refinement": "completed", "residuals": _results_residuals()}
++            "Refinement raised: %s\n--- GSAS-II log tail ---\n%s" % (e, "\n".join(log))
++        ) from None
++    log = buf.getvalue()
++    for marker in _REFINE_FAIL_MARKERS:
++        if marker in log:
++            tail = "\n".join(
++                ln for ln in log.splitlines() if ln.strip()
++            )[-1200:]
++            raise RuntimeError(
++                "Refinement failed (%s). GSAS-II log tail:\n%s" % (marker, tail)
++            )
++    out = {"refinement": "completed", "residuals": _results_residuals()}
++    if "Refinement successful" in log:
++        out["gsas2_status"] = "Refinement successful"
++    m = _MAX_SHIFT_RE.search(log)
++    if m:
++        try:
++            shift = float(m.group(1))
++        except ValueError:
++            shift = None
++        if shift is not None:
++            out["max_shift_over_esd"] = _round(shift, 4)
++            if shift > 1.0:
++                out["convergence_warning"] = (
++                    "Max shift/esd = %.3f > 1: GSAS-II stopped before convergence "
++                    "(Controls['max cyc'] = %s). Re-run with refine(max_cycles=N) or "
++                    "release fewer parameters before trusting these residuals."
++                    % (shift, _current_project.data.get("Controls", {}).get("data", {}).get("max cyc"))
++                )
++    return out
+ 
+ 
+ def _results_residuals() -> dict:
+@@ -569,7 +615,16 @@
+         {"var_name": {"type": "string", "description": "Variable name to free"}},
+         required=["var_name"],
+     ),
+-    _tool("refine", "Run a Rietveld refinement on the current project (GSAS-II iterates to convergence)", {}),
++    _tool(
++        "refine",
++        "Run a Rietveld refinement on the current project (GSAS-II iterates to "
++        "convergence or until Controls['max cyc']). Returns residuals plus the "
++        "final max shift/esd and a convergence warning when shift/esd > 1.",
++        {"max_cycles": {"type": "integer",
++                        "description": "Optional: raise Controls['max cyc'] for this call "
++                                       "(GSAS-II default 3 often stops before convergence)",
++                        "default": 0}},
++    ),
+     _tool("get_results", "Get full refinement results: residuals (wR, R, GOF), cell parameters with esd, atomic coordinates", {}),
+     _tool(
+         "export_results",

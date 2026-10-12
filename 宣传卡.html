@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>XRD Rietveld 精修 · Skill + MCP 宣传卡</title>
+<style>
+  :root{
+    --ink:#0f1720; --muted:#5b6b7c; --line:#d8e0e8; --bg:#f5f7fa;
+    --accent:#1f4ed8; --green:#1b9e77; --warn:#b4531f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:"Segoe UI","Microsoft YaHei",system-ui,-apple-system,sans-serif;color:var(--ink)}
+  .card{
+    width:1160px;margin:32px auto;background:#fff;border:1px solid var(--line);
+    border-radius:14px;padding:44px 52px 34px;box-shadow:0 10px 34px rgba(15,23,32,.07)
+  }
+  header{border-bottom:3px solid var(--ink);padding-bottom:18px;margin-bottom:26px}
+  h1{margin:0 0 8px;font-size:40px;line-height:1.15;letter-spacing:-.5px}
+  h1 small{display:block;font-size:16px;font-weight:600;color:var(--accent);letter-spacing:.6px;margin-bottom:10px}
+  .lede{margin:12px 0 0;font-size:17px;line-height:1.6;color:var(--muted);max-width:940px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 30px}
+  .kpi{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .kpi b{display:block;font-size:30px;line-height:1.1;letter-spacing:-.5px}
+  .kpi span{display:block;margin-top:6px;font-size:13px;color:var(--muted);line-height:1.45}
+  .cols{display:grid;grid-template-columns:1.05fr 1fr;gap:26px}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 12px;font-weight:700}
+  ul{margin:0;padding:0;list-style:none}
+  li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.5}
+  li:last-child{border-bottom:0}
+  li code{background:#eef2f7;border-radius:4px;padding:1px 6px;font-size:13.5px;font-family:Consolas,Menlo,monospace}
+  li em{font-style:normal;color:var(--muted);font-size:13px;display:block;margin-top:2px}
+  .num{font-variant-numeric:tabular-nums;font-weight:700}
+  .good{color:var(--green)} .bad{color:var(--warn)}
+  .tools{columns:2;column-gap:22px;font-size:13.5px;font-family:Consolas,Menlo,monospace;color:var(--ink)}
+  .tools span{display:block;padding:3px 0;break-inside:avoid}
+  .quote{margin-top:28px;background:#0f1720;color:#eaf0f7;border-radius:12px;padding:20px 24px;font-size:16px;line-height:1.65}
+  .quote b{color:#8fb0ff}
+  footer{margin-top:26px;border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;margin-right:6px;font-size:12px;color:var(--muted)}
+  .note{margin-top:14px;font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <h1><small>GSAS-II · 粉末 XRD · Rietveld</small>
+      把 Rietveld 精修交给 AI 代理
+    </h1>
+    <p class="lede">
+      4 个 Skill 管「怎么修」（流程 / 判据 / 报告口径），1 个 MCP 服务器管「能动手」（19 个 GSAS-II 工具）。
+      精修、判定、画图严格分离；数字带协方差 esd 与文件哈希；被否的方案与证据边界全部留档。
+    </p>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi"><b>4</b><span>精修 / 多相 QPA / 出版级画图 / 全自动脚本 Skill</span></div>
+    <div class="kpi"><b>19</b><span>MCP 工具（建项目 → 导入 → 设参 → 精修 → 导出）</span></div>
+    <div class="kpi"><b>3</b><span>条互相独立的判据：线位缺失 / 晶胞是否自走 / 逐阶段模型胜负</span></div>
+    <div class="kpi"><b class="good">12.87&nbsp;%</b><span>官方 PbSO₄ 样例经 MCP 全程驱动收敛的 wR（GOF 2.69）</span></div>
+  </div>
+
+  <div class="cols">
+    <section>
+      <h2>Skill 分工</h2>
+      <ul>
+        <li><code>gsas-ii-rietveld-refinement</code>
+          <em>单相 + 变温/原位序列；含实测坑库（U/V/W 是方差而非 FWHM、幻影相三条件判否、脚本与进程卫生…）</em></li>
+        <li><code>gsas-ii-multiphase-refinement</code> <span class="pill">Beta</span>
+          <em>多相 QPA：相集状态声明、协方差质量分数、简并规避、可重复性重跑</em></li>
+        <li><code>rietveld-plotting</code>
+          <em>只读 .gpx 出出版级图：哈希进出一致、Bragg 行按物相分色、wt% 只取协方差质量分数</em></li>
+        <li><code>gsas2-xrd-refinement</code>
+          <em>一条命令跑完单相/多相；参数组逐级释放 + 阶段失败自动回退</em></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>MCP · 19 个工具</h2>
+      <div class="tools">
+        <span>create_project</span><span>load_project</span><span>save_project</span>
+        <span>project_summary</span><span>inspect_data_file</span><span>add_powder_histogram</span>
+        <span>add_phase</span><span>list_histograms</span><span>list_phases</span>
+        <span>set_refinement</span><span>set_histogram_params</span><span>set_phase_params</span>
+        <span>get_variables</span><span>hold_variable</span><span>free_variable</span>
+        <span>refine</span><span>get_results</span><span>export_results</span><span>export_plot</span>
+      </div>
+    </section>
+  </div>
+
+  <section style="margin-top:26px">
+    <h2>方法与验证（可复核）</h2>
+    <ul>
+      <li><b>候选相采纳 / 否证的三条独立判据</b>：① 候选相的两条最强反射必须出现（缺一即否，且两族强线不可能被取向压掉）；
+        ② 给自由晶胞看它是否"自走"——真结构收敛在参考值附近，幻影相会被邻峰吸走且 esd 失去约束；
+        ③ 同图同峰形参数下逐阶段比较模型胜负，并按"参数更少优先"取舍
+        <em>结论必须写边界：粉末 XRD 对散射因子接近的原子不可分辨，未归属峰单列杂相，被否方案留档</em></li>
+      <li><b>打包自检时修掉 MCP 一个真缺陷</b>：<code>refine</code> 工具把成功精修判成失败（本版 <code>Project.refine()</code> 恒返回 None）。
+        修前自检第 8 步中断 → 修后 <span class="num good">12/12</span> 步通过；
+        并把 GSAS-II 默认 3 轮迭代导致的 wR <span class="num bad">63.80 %</span>（shift/esd 55.1）暴露为显式收敛警告
+        <em>新增 <code>refine(max_cycles=12)</code>：同一份官方样例数据收敛到 <span class="num good">12.865 %</span>（GOF 2.6876）</em></li>
+      <li><b>全程留证</b>：每个结论都有对应的 JSON / 哈希 / 复现脚本 —— 官方 PbSO₄ 样例的结果 JSON 与拟合图随包（<code>verify/</code>），
+        运行日志按作者要求不对外，脚本可一键复现</li>
+    </ul>
+  </section>
+
+  <div class="quote">
+    精修 / 判定 / 画图三权分立 —— <b>画图只读 .gpx 并校验哈希</b>；
+    口径先声明（仪器轮廓是否标定、Zero 分支、相集状态）再谈结论；
+    出现未解释强残差峰、相关度 ≥ 95 %、SVD 奇异时，<b>停在"待科学复核"，不给漂亮但假的结论</b>。
+  </div>
+
+  <footer>
+    <span>XRD-Rietveld-Skill-MCP · 2026-10-12 打包 · Hermes Agent（Windows 11 + GSAS-II）</span>
+    <span>含安装文档 / 排错表 / 脱敏实测案例 / 修复记录 / 复现脚本</span>
+  </footer>
+  <p class="note">本包不含任何未公开课题数据：外部可引用数字均来自 GSAS-II 官方 PbSO₄ 样例；脱敏清单见 docs/06。</p>
+</div>
+</body>
+</html>

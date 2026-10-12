@@ -1,0 +1,99 @@
+{
+  "residuals": {
+    "PWDR PBSO4.XRA Bank 1": {
+      "wR": 63.802889,
+      "R": 55.42854,
+      "wRmin": 4.78675,
+      "GOF": 13.3291
+    }
+  },
+  "phases": {
+    "PbSO4": {
+      "cell": {
+        "length_a": 8.516785,
+        "length_b": 5.417045,
+        "length_c": 6.985655,
+        "angle_alpha": 90.0,
+        "angle_beta": 90.0,
+        "angle_gamma": 90.0,
+        "volume": 322.288841
+      },
+      "cell_esd": {
+        "length_a": 0.000697,
+        "length_b": 0.000445,
+        "length_c": 0.000539,
+        "angle_alpha": 0.0,
+        "angle_beta": 0.0,
+        "angle_gamma": 0.0,
+        "volume": 0.029915
+      },
+      "atoms": [
+        {
+          "label": "Pb",
+          "element": "Pb",
+          "type": "Pb",
+          "coordinates": [
+            0.1882,
+            0.25,
+            0.167
+          ],
+          "occupancy": 1.0,
+          "uiso": 0.01,
+          "refinement_flags": ""
+        },
+        {
+          "label": "S",
+          "element": "S",
+          "type": "S",
+          "coordinates": [
+            0.063,
+            0.25,
+            0.686
+          ],
+          "occupancy": 1.0,
+          "uiso": 0.01,
+          "refinement_flags": ""
+        },
+        {
+          "label": "O1",
+          "element": "O",
+          "type": "O",
+          "coordinates": [
+            -0.095,
+            0.25,
+            0.6
+          ],
+          "occupancy": 1.0,
+          "uiso": 0.01,
+          "refinement_flags": ""
+        },
+        {
+          "label": "O2",
+          "element": "O",
+          "type": "O",
+          "coordinates": [
+            0.181,
+            0.25,
+            0.543
+          ],
+          "occupancy": 1.0,
+          "uiso": 0.01,
+          "refinement_flags": ""
+        },
+        {
+          "label": "O3",
+          "element": "O",
+          "type": "O",
+          "coordinates": [
+            0.085,
+            0.026,
+            0.806
+          ],
+          "occupancy": 1.0,
+          "uiso": 0.01,
+          "refinement_flags": ""
+        }
+      ]
+    }
+  }
+}

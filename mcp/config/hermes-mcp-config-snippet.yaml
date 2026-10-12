@@ -1,0 +1,22 @@
+# 从 <HERMES_HOME>\config.yaml 抽取
+# （mcp_servers 段中的 gsas2 条目，原样，未改动）
+mcp_servers:
+  gsas2:
+    command: D:\app\xrd\python.exe
+    args:
+      - -m
+      - gsas2_mcp_server
+    env:
+      PYTHONPATH: <USER_HOME>\iPolloWork\gsas2-mcp
+      GSAS2_MCP_PATH: D:\app\xrd\GSAS2-MCP
+      GSASII_HEADLESS: 'true'
+      MPLBACKEND: Agg
+    connect_timeout: 180.0
+    enabled: true
+
+# 等价的手工注册命令（git-bash，注意先导出 HERMES_HOME）:
+# export HERMES_HOME="<HERMES_HOME>"
+# hermes mcp add gsas2 --command "D:\app\xrd\python.exe" --args "-m gsas2_mcp_server" \
+#   --env PYTHONPATH="<USER_HOME>\iPolloWork\gsas2-mcp" \
+#   --env GSAS2_MCP_PATH="D:\app\xrd\GSAS2-MCP" \
+#   --env GSASII_HEADLESS=true --env MPLBACKEND=Agg

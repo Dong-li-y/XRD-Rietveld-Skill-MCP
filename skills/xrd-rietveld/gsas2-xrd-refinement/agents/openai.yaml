@@ -1,0 +1,4 @@
+interface:
+  display_name: "GSAS-II XRD Refinement"
+  short_description: "Single and multiphase GSAS-II refinement"
+  default_prompt: "Use $gsas2-xrd-refinement to refine powder XRD data with GSAS-II for single-phase or multiphase CIF models."

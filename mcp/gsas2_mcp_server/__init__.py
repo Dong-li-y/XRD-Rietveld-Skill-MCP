@@ -1,0 +1,1 @@
+"""GSAS2-MCP server package."""

@@ -1,0 +1,20 @@
+TOOL_COUNT=19
+ - add_phase
+ - add_powder_histogram
+ - create_project
+ - export_plot
+ - export_results
+ - free_variable
+ - get_results
+ - get_variables
+ - hold_variable
+ - inspect_data_file
+ - list_histograms
+ - list_phases
+ - load_project
+ - project_summary
+ - refine
+ - save_project
+ - set_histogram_params
+ - set_phase_params
+ - set_refinement
